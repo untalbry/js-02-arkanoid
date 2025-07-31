@@ -18,6 +18,40 @@ let paddelY = canvas.height - paddleHeight - 10 ;
 let rightPressed = false;
 let leftPressed = false;
 const PADEL_SPEED = 7;
+const $sprite = document.querySelector('#sprite');
+const $bricks = document.querySelector('#bricks');
+
+// variables de los ladrillos 
+const bricksRows = 6;
+const bricksColumns = 13;
+const brickWidth = 30;
+const brickHeight = 14;
+const brickPadding = 2;
+const brickOffsetTop = 80;
+const brickOffsetLeft = 16;
+const bricks = [];
+const BRICK_STATUS = {
+    ACTIVE: 1,
+    DESTROYED: 0
+}
+
+for(let c = 0; c < bricksColumns; c++){
+    bricks[c] = [];
+    for(let r = 0; r < bricksRows; r++){
+        const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
+        const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
+        //asignar un color aleatorio por cada ladrillo
+        const random = Math.floor(Math.random() * 7);
+        bricks[c][r] = {   
+            x : brickX,
+            y : brickY,
+            status: BRICK_STATUS.ACTIVE, // 1 significa que el ladrillo está activo
+            color: random
+        };
+    }
+}
+
+
 function drawBall() {
     context.beginPath(); // inicia un dibujo 
     context.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
@@ -26,12 +60,23 @@ function drawBall() {
     context.closePath();
 }
 function drawPaddle() {
-    context.fillStyle = '#fff';
-    context.fillRect(paddelX, paddelY, paddleWidth, paddleHeight);
-
+    context.drawImage($sprite,29,174,paddleWidth, paddleHeight,paddelX,paddelY,paddleWidth,paddleHeight);
 }
-function drawBricks() {}
+function drawBricks() {
+    for(let c = 0; c < bricksColumns; c++){
+        for(let r = 0; r < bricksRows; r++){
+            const currentBrick = bricks[c][r];
+            if(currentBrick.status === BRICK_STATUS.DESTROYED){
+               continue; 
+            }
+             
+            const clipX = currentBrick.color * 32; 
+            context.drawImage($bricks, clipX, 0, 31, 14, currentBrick.x, currentBrick.y, brickWidth, brickHeight); 
 
+            
+        }
+    }
+}
 function ballMovement() {
     if(ballX + directionX > canvas.width - ballRadius || ballX + directionX < ballRadius){
         directionX = -directionX;
@@ -40,9 +85,8 @@ function ballMovement() {
         directionY = -directionY;
     }
     const isBallInPaddle = ballY + directionY > paddelY &&
-        ballY + directionY < paddelY + paddleHeight &&
         ballX + directionX > paddelX &&
-        ballX + directionX < paddelX + paddleWidth;
+        directionX < paddelX + paddleWidth;
     if(isBallInPaddle){
        directionY = -directionY; 
     }
