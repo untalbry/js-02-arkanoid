@@ -77,6 +77,21 @@ function drawBricks() {
         }
     }
 }
+function colisionDetection(){
+    for(let c = 0; c< bricksColumns; c++){
+        for(let r = 0; r < bricksRows; r++){
+            const currentBrick = bricks[c][r];
+            if(currentBrick.status === BRICK_STATUS.DESTROYED){
+                continue;
+            }
+            if(ballX > currentBrick.x && ballX < currentBrick.x + brickWidth &&
+                ballY > currentBrick.y && ballY < currentBrick.y + brickHeight){
+                directionY = -directionY;
+                currentBrick.status = BRICK_STATUS.DESTROYED; 
+            }
+        }
+    }
+}
 function ballMovement() {
     if(ballX + directionX > canvas.width - ballRadius || ballX + directionX < ballRadius){
         directionX = -directionX;
@@ -144,7 +159,7 @@ function draw() {
     //colisiones y movimientos
     ballMovement(); 
     paddelMovement();
-    
+    colisionDetection();
     //requestAnimationFrame nos permite llamar a una función antes de que 
     //el navegador vuelva a dibujar la pantalla y esta sincronizado con el 
     //refresco de tu pantalla. Ideal para animaciones. 
