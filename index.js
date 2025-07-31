@@ -84,8 +84,9 @@ function colisionDetection(){
             if(currentBrick.status === BRICK_STATUS.DESTROYED){
                 continue;
             }
-            if(ballX > currentBrick.x && ballX < currentBrick.x + brickWidth &&
-                ballY > currentBrick.y && ballY < currentBrick.y + brickHeight){
+            const isBallSameXasBrick = ballX > currentBrick.x && ballX < currentBrick.x + brickWidth;
+            const isBallSameYasBrick = ballY > currentBrick.y && ballY < currentBrick.y + brickHeight;
+            if(isBallSameXasBrick && isBallSameYasBrick){
                 directionY = -directionY;
                 currentBrick.status = BRICK_STATUS.DESTROYED; 
             }
@@ -101,16 +102,18 @@ function ballMovement() {
     }
     const isBallInPaddle = ballY + directionY > paddelY &&
         ballX + directionX > paddelX &&
-        directionX < paddelX + paddleWidth;
+        ballX < paddelX + paddleWidth;
     if(isBallInPaddle){
        directionY = -directionY; 
+       directionY -= 0.2; // Aumentar la velocidad de la pelota ligeramente
+
     }
     else if(ballY + directionY > canvas.height - ballRadius){
         // Aquí podrías reiniciar el juego o restar vidas
         console.log('Game Over');
         document.location.reload(); // Recargar la página para reiniciar el juego
     }
-    ballX += directionX;
+    ballX += directionX ;
     ballY += directionY;
 }
 function paddelMovement() {
