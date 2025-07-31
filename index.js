@@ -24,9 +24,9 @@ const $bricks = document.querySelector('#bricks');
 // variables de los ladrillos 
 const bricksRows = 6;
 const bricksColumns = 13;
-const brickWidth = 30;
-const brickHeight = 14;
-const brickPadding = 2;
+const brickWidth = 32;
+const brickHeight = 16;
+const brickPadding = 0;
 const brickOffsetTop = 80;
 const brickOffsetLeft = 16;
 const bricks = [];
@@ -71,7 +71,7 @@ function drawBricks() {
             }
              
             const clipX = currentBrick.color * 32; 
-            context.drawImage($bricks, clipX, 0, 31, 14, currentBrick.x, currentBrick.y, brickWidth, brickHeight); 
+            context.drawImage($bricks, clipX, 0, 32, 16, currentBrick.x, currentBrick.y, brickWidth, brickHeight); 
 
             
         }
